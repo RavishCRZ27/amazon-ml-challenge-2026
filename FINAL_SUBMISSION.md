@@ -27,7 +27,7 @@ All files are attached to the release
 |---|---|---|
 | `matching_results.tsv.gz` | final matches, the file scored on the leaderboard (1,732,544 rows, 95.1 MB) | `3d61e100489f7047641294922eb5bff1` |
 | `candidate_pairs.tsv.gz` | candidate set fed to the matcher (1,732,544 rows, 1.13 GB) | `afc30cca32502ca9eb1baa1922713823` |
-| `TheAnarchy_submission.zip` | the submitted package: both TSVs, code, methodology | `cdc098babf70ad8769a4d75675d0e246` (zip itself) |
+| `TheAnarchy_submission.zip` | the submitted package: both TSVs, code, methodology | `4ff3b2043adc85f57a27fa4cedc8f999` (zip itself) |
 
 **Challenge dataset** (as provided by the organisers; not covered by this repository's license)
 
