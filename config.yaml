@@ -53,7 +53,7 @@ optional:
                   train_band: [0.05, 0.95],   # TRAIN pairs it learns from (+ positives / random negatives)
                   band: [0.002, 0.998],       # pairs it scores + combiner band (run 2: +.00051±.00006 VAL vs [.01,.99])
                   batch_size: 64, lr: 2.0e-5, max_train: 300000,   # bs 128 runs out of memory on the L4
-                  init_dir: work/eval/xenc_exp_rr300k/model}       # adopt the evaluated model (same recipe); unset = retrain ~34 min
+                  init_dir: null}       # null = fine-tune it in S4x (~34 min); a trained model dir (same recipe) is adopted instead
   llm_triage: {enabled: false, model_dir: models/Qwen2.5-7B-Instruct, python: .venv-llm/bin/python,
                band: [0.3, 0.7], max_pairs: 30000, few_shot: 4}
   emit_gate: {enabled: false}   # E4: S1-level gate against emitting on singletons
