@@ -1,0 +1,19 @@
+# Python 3.12; pinned from the environment that produced the submission.
+# torch: install the CUDA 12.4 build (--extra-index-url https://download.pytorch.org/whl/cu124)
+polars==1.44.2
+pyarrow==25.0.1
+numpy==2.5.2
+scipy==1.18.1
+rapidfuzz==3.14.6
+sparse_dot_topn==1.2.0
+xgboost==3.4.1
+lightgbm==4.7.0
+scikit-learn==1.9.1
+pyyaml==6.0.3
+torch==2.6.0
+transformers==5.17.0
+tokenizers==0.23.2
+safetensors==0.8.0
+huggingface_hub==1.33.0
+# optional stage s2e_embed.py only (off in the submitted configuration)
+sentence-transformers==6.1.0

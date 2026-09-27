@@ -1,0 +1,23 @@
+[
+ {
+  "country": "France",
+  "s1": 259452,
+  "mean_matches": 3.12,
+  "empty_rate": 0.061,
+  "mean_cands": 49.7
+ },
+ {
+  "country": "India",
+  "s1": 809986,
+  "mean_matches": 3.236,
+  "empty_rate": 0.0629,
+  "mean_cands": 49.4
+ },
+ {
+  "country": "US",
+  "s1": 663106,
+  "mean_matches": 3.345,
+  "empty_rate": 0.0579,
+  "mean_cands": 49.9
+ }
+]

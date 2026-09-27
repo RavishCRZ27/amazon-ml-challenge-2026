@@ -1,0 +1,44 @@
+# Every tunable lives here; config.v1.yaml is the frozen copy of the first full run.
+# Changing a section re-runs only the stages downstream of it (see specs/infra.md).
+run_id: v1                  # S3 prefix and artifact tag (overridden by env RUN_ID if set)
+budget_hours: 5             # may grow to 10; the stages read it for kill criteria
+n_workers: auto             # auto = os.cpu_count()
+seed: 0
+disk_min_free_gb: 25
+
+split:
+  train_s1: 200000
+  val_s1: 100000
+  early_stop_s1: 20000
+chunk_s1: 100000            # S1 rows per country chunk (memory bound)
+
+blocking:
+  max_candidates: 50
+  views:
+    W_name: {enabled: true, k: 20, skip_cap_frac: 0.01}
+    W_addr: {enabled: true, k: 20, skip_cap_frac: 0.01}
+    C_name: {enabled: true, k: 20, skip_cap_frac: 0.005, ngram: 3}
+
+features:
+  address_partial_ratio: true   # first thing to drop if S3 is too slow
+
+model:
+  backend: lightgbm             # lightgbm | xgboost (GPU)
+  lightgbm: {num_leaves: 127, learning_rate: 0.05, n_estimators: 3000, early_stopping_rounds: 100,
+             feature_fraction: 0.8, bagging_fraction: 0.8, bagging_freq: 1, min_child_samples: 50}
+  xgboost: {max_depth: 8, learning_rate: 0.05, n_estimators: 3000, early_stopping_rounds: 100,
+            tree_method: hist, device: cuda, subsample: 0.8, colsample_bytree: 0.8}
+
+threshold:
+  t_grid: [0.02, 0.98, 0.01]    # start, stop, step
+  relative_r: [0.0, 0.2, 0.4, 0.6]
+
+injective: auto                 # auto = on if the GT injectivity check passes; on | off
+
+s3:
+  enabled_if_env: BER_S3_BUCKET
+  exclude: ["*/s3_features/*"]
+
+optional:
+  embed_view: {enabled: false, model_dir: models/multilingual-e5-small, k: 20, batch_size: 512}
+  llm_triage: {enabled: false, model_dir: models/Qwen2.5-7B-Instruct, band: [0.3, 0.7], max_pairs: 30000}

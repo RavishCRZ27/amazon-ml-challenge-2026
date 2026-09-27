@@ -1,0 +1,28 @@
+# data and generated artifacts
+data/
+work/
+output/
+dist/
+models/
+logs/*.log
+# raw notebook contains a token: never commit it (docs/v1_eda.py is the redacted copy)
+notebooks/
+*.ipynb
+# environments and secrets
+.venv/
+__pycache__/
+.env
+.env.*
+*.pem
+logs/.s3sync.lock
+logs/timings.tsv
+logs/preflight.txt
+.venv-llm/
+submissions/**/*.tsv
+
+# third-party notes (read-only inspiration, never committed or shipped)
+extra/
+
+# challenge data and materials (organisers' files): never commit
+student_resource/
+logs/

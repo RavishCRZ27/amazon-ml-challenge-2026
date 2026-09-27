@@ -1,0 +1,95 @@
+{
+ "backend": "xgboost",
+ "model_file": "output/artifacts/model.json",
+ "features": [
+  "score_W_all",
+  "rank_W_all",
+  "gap_W_all",
+  "score_C_all",
+  "rank_C_all",
+  "gap_C_all",
+  "n_views",
+  "n_cands",
+  "cand_pos",
+  "n_exact",
+  "sk_exact",
+  "n_first_tok",
+  "n_len_diff",
+  "script_s1",
+  "script_pool",
+  "cross_script",
+  "name_freq_s1",
+  "name_freq_pool",
+  "a_missing_s1",
+  "a_missing_pool",
+  "is_s3",
+  "rc_rank_W_all",
+  "rc_gap_W_all",
+  "rc_rank_C_all",
+  "rc_gap_C_all",
+  "a_contain",
+  "a_jacc",
+  "a_idf_cont",
+  "a_idf_shared",
+  "n_idf_cont",
+  "num_shared",
+  "num_conflict",
+  "num_longest",
+  "num_first",
+  "a_last2",
+  "n_ratio",
+  "n_tsort",
+  "n_tset",
+  "n_partial",
+  "n_jw",
+  "sk_ratio",
+  "sk_tsort",
+  "sk_tset",
+  "sk_partial",
+  "sk_jw",
+  "nsp_ratio",
+  "nsp_partial",
+  "a_tset",
+  "a_partial",
+  "n_grp_rank",
+  "a_grp_rank",
+  "n_grp_gap",
+  "a_grp_gap"
+ ],
+ "best_iteration": 1994,
+ "t": 0.71,
+ "r": 0.0,
+ "injective": true,
+ "plateau": [
+  0.56,
+  0.87
+ ],
+ "val": {
+  "f05": 0.9796,
+  "se": 0.00027
+ },
+ "holdout": {
+  "f05": 0.97936,
+  "se": 0.00027
+ },
+ "limit_s1": null,
+ "s3_scope_s1": 400000,
+ "s4_hash": "f508648bf43878a8",
+ "xenc": {
+  "model_dir": "output/artifacts/xenc",
+  "band": [
+   0.002,
+   0.998
+  ],
+  "max_len": 96,
+  "combiner": {
+   "w": [
+    0.7714651287450868,
+    0.7823889715023802,
+    8.009772427174957e-05
+   ],
+   "b": 0.1500470138408893
+  }
+ },
+ "s4x_hash": "5e7e180a1e05dbf8"
+}

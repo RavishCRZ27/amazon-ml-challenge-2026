@@ -1,0 +1,57 @@
+# Every tunable lives here; config.v1.yaml is the frozen copy of the first full run.
+# Changing a section re-runs only the stages downstream of it (see specs/infra.md).
+run_id: v1                  # S3 prefix and artifact tag (overridden by env RUN_ID if set)
+budget_hours: 8             # per clean run (20 h left in total: run 1 <= 8 h, run 2 <= 4 h resuming)
+n_workers: auto             # auto = os.cpu_count()
+seed: 0
+disk_min_free_gb: 25
+
+split:
+  train_s1: 200000
+  val_s1: 100000
+  early_stop_s1: 20000
+  holdout_s1: 100000        # never used for any choice; scored once per submission candidate
+chunk_s1: 100000            # S1 rows per country chunk (memory bound)
+
+blocking:
+  max_candidates: 50        # applied in S3 (not part of S2's hash)
+  store_candidates: 80      # S2 parts keep the ordered union up to this (cand_pos), reusable by run 2
+  views:   # EDA-14 (50K VAL slice): W_all 40 + C_all 40 -> recall 0.9716 at 49.7 cands/S1
+    W_all:  {enabled: true, k: 40, skip_cap_frac: 0.01}               # name + address tokens in one vector
+    C_all:  {enabled: true, k: 40, skip_cap_frac: 0.005, ngram: 3}    # name-skeleton 3-grams + address tokens
+    W_name: {enabled: false, k: 20, skip_cap_frac: 0.01}   # names repeat across businesses: ties
+    W_addr: {enabled: false, k: 20, skip_cap_frac: 0.01}   # adds <0.001 recall on top of the two above
+    C_name: {enabled: false, k: 20, skip_cap_frac: 0.005, ngram: 3}
+
+features:
+  address_partial_ratio: true   # first thing to drop if S3 is too slow
+  reverse_competition: true     # rc_*: how this pool row ranks across ALL S1s that retrieved it
+
+model:
+  backend: xgboost              # lightgbm | xgboost (GPU); benchmark 2026-09-26: equal F, xgb 3x faster
+  lightgbm: {num_leaves: 127, learning_rate: 0.05, n_estimators: 6000, early_stopping_rounds: 100,
+             feature_fraction: 0.8, bagging_fraction: 0.8, bagging_freq: 1, min_child_samples: 50}
+  xgboost: {max_depth: 8, learning_rate: 0.05, n_estimators: 6000, early_stopping_rounds: 100,
+            tree_method: hist, device: cuda, subsample: 0.8, colsample_bytree: 0.8}
+
+threshold:
+  t_grid: [0.02, 0.98, 0.01]    # start, stop, step
+  relative_r: [0.0, 0.2, 0.4, 0.6]
+  plateau_tol: 0.001            # t = centre of the plateau within this of the max F
+
+injective: auto                 # auto = on if the GT injectivity check passes; on | off
+
+s3:
+  enabled_if_env: BER_S3_BUCKET
+  exclude: ["*/s3_features/*"]
+
+optional:
+  embed_view: {enabled: false, model_dir: models/multilingual-e5-small, prefix: "query: ", max_len: 64, text: name, feature: true,
+               view: false, k: 20, nprobe: 32, batch_size: 512}
+  cross_encoder: {enabled: true, model_dir: models/multilingual-e5-small, max_len: 96, epochs: 1,
+                  train_band: [0.05, 0.95],   # TRAIN pairs it learns from (+ positives / random negatives)
+                  band: [0.01, 0.99],         # pairs it scores + combiner band (step 3: +0.0284 VAL vs +0.0263 at .05/.95)
+                  batch_size: 256, lr: 5.0e-5, max_train: 1000000}
+  llm_triage: {enabled: false, model_dir: models/Qwen2.5-7B-Instruct, python: .venv-llm/bin/python,
+               band: [0.3, 0.7], max_pairs: 30000, few_shot: 4}
+  emit_gate: {enabled: false}   # E4: S1-level gate against emitting on singletons
