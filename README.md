@@ -4,6 +4,8 @@ Match every Source-1 business record to **all** of its records in Sources 2 and 
 addresses, three countries (one of them unseen in training), ~1.7M queries against ~10M pool records.
 
 **Final result:** public leaderboard **0.968** macro-F0.5 · held-out F0.5 **0.9800 ± 0.0003** (India 0.972, US 0.985).
+Final submission report: [`FINAL_SUBMISSION.md`](FINAL_SUBMISSION.md) · submitted files and dataset:
+[release `final-run2-0.968`](https://github.com/RavishCRZ27/amazon-ml-challenge-2026/releases/tag/final-run2-0.968).
 
 The pipeline uses only the provided data and local open models (Apache-2.0 / MIT, ≤ 8B parameters). No external
 lookups, and nothing touches the network at inference.
@@ -59,6 +61,19 @@ Macro-F0.5 over all S1s, singletons included, recall against the full ground tru
 - Every option was adopted only if its paired gain on VAL exceeded 2 standard errors; the full list of experiments
   (kept and dropped) is in [`docs/Documentation_filled.md`](docs/Documentation_filled.md).
 
+## Final submission & downloads
+
+The release [**final-run2-0.968**](https://github.com/RavishCRZ27/amazon-ml-challenge-2026/releases/tag/final-run2-0.968)
+holds everything that was submitted, gzip-compressed, with `SHA256SUMS.txt`:
+
+- `matching_results.tsv.gz` — the final matches scored on the leaderboard (0.968)
+- `candidate_pairs.tsv.gz` — the candidate set the matcher scored
+- `TheAnarchy_submission.zip` — the submitted package (both TSVs, code, methodology)
+- the challenge dataset: `train_source{1,2,3}`, `train_ground_truth`, `test_source{1,2,3}` (`.tsv.gz`)
+
+Scores, file checksums, output statistics and the checks run before the upload are in
+[`FINAL_SUBMISSION.md`](FINAL_SUBMISSION.md).
+
 ## Quick start
 
 **Environment:** Python 3.12, a CUDA 12.x GPU with ≥ 20 GB (tested on 32 vCPU, 128 GB RAM, 1× NVIDIA L4 24 GB),
@@ -72,7 +87,8 @@ python3.12 -m venv .venv
     --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
-**Data and model** (not included in this repository):
+**Data and model.** The dataset is attached to the release above (gunzip it into `data/dataset/`); the validator
+comes with the challenge's `utils/` folder, and the model is downloaded once:
 
 ```
 data/dataset/train/*.tsv, data/dataset/test/*.tsv   # the challenge's dataset/ folder
@@ -145,5 +161,6 @@ submissions/          per-submission metadata: config, thresholds, reports, md5s
 
 ## License
 
-Apache-2.0. Third-party model weights keep their own licenses (`bge-reranker-v2-m3`: Apache-2.0). The challenge
-data is not included and is not redistributed here.
+Apache-2.0 for the code and documents in this repository. Third-party model weights keep their own licenses
+(`bge-reranker-v2-m3`: Apache-2.0). The challenge dataset attached to the release is the organisers' data, provided
+as-is for reference; it is not covered by this repository's license.
