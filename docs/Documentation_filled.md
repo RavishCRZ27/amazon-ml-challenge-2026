@@ -1,4 +1,4 @@
-# ML Challenge 2026: Business Entity Resolution Solution Template
+# ML Challenge 2026: Business Entity Resolution Solution
 
 **Team Name:** TheAnarchy
 **Team Members:** Ravish Pandey ([@RavishCRZ27](https://github.com/RavishCRZ27)), Samar Nathani ([@SammySN-car](https://github.com/SammySN-car)), Ayush Rajdeep ([@rajdeep3456](https://github.com/rajdeep3456))
